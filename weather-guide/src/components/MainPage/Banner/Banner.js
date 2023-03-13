@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import classes from "./Banner.module.scss"
 
 
@@ -7,23 +7,18 @@ import classes from "./Banner.module.scss"
 const Banner = () =>{
 
     const [coords, setCoords] = useState({x: 0, y: 0});
+    const [bindFunction, setBindFunction] = useState(0)
 
-    useEffect(() => {
-        const handleWindowMouseMove = event => {
+        const handleWindowMouseMove = useCallback((event) => {
             setCoords({
                 x: event.clientX,
                 y: event.clientY,
             });
-        };
-        window.addEventListener('mousemove', handleWindowMouseMove);
 
-        return () => {
-            window.removeEventListener(
-                'mousemove',
-                handleWindowMouseMove,
-            );
-        };
-    }, []);
+
+        }, [])
+
+
 
 
     let marginBackgroundLeft = - window.innerWidth*0.05 + coords.x/50
@@ -40,7 +35,25 @@ const Banner = () =>{
     }
 
     return(
-        <div className={classes.bannerWrapper}>
+        <div onMouseEnter={() => {
+
+
+
+            if (bindFunction === 0) {
+                window.addEventListener('mousemove', handleWindowMouseMove)
+                console.log("enter")
+                setBindFunction(1)
+            }
+            }}
+             onMouseLeave={()=>{
+                 setBindFunction(0)
+                 console.log("leave")
+                 window.removeEventListener(
+            'mousemove',
+                    handleWindowMouseMove,
+                 );
+             }}
+             className={classes.bannerWrapper}>
             <div className={classes.darkener}></div>
             <div className={classes.bannerText}>
                 <div className={classes.title}>Weather Guide</div>

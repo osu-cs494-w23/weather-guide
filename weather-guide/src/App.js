@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import MainPage from "./components/MainPage/MainPage";
+import PageWrapper from "./components/PageWrapper/PageWrapper";
 function App() {
   return (
     <div className="App">
-      <MainPage></MainPage>
+      <PageWrapper></PageWrapper>
     </div>
   );
 }

@@ -13,10 +13,18 @@
   float: left;
 }
 
-
+.highlight {
+  transition: 0.2s ease-in-out;
+  width: 100px;
+  background-color: $mainText;
+  margin-top: 56px;
+  position: absolute;
+  height: 2px;
+}
 
 .buttonsWrapper{
-
+  overflow: hidden;
+  height: 66px;
   margin: auto;
   display: block;
   width: 800px;
@@ -28,6 +36,8 @@
 }
 
 .button{
+
+  text-decoration: none;
   text-align: center;
   display: inline-block;
   cursor: pointer;
