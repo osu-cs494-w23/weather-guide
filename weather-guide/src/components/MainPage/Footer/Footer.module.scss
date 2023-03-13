@@ -1,0 +1,39 @@
+@import  "/src/variables" ;
+
+.footer{
+  height: 400px;
+  width: 100vw;
+  background-color: $mainBack;
+}
+
+.columnWrapper{
+  width: 1200px;
+  margin-left: calc(50vw - 550px);
+  height: 400px;
+  display: flex;
+}
+
+.column{
+  display: inline-block;
+  width: 400px;
+  height: 400px;
+}
+
+.columnTitle{
+  padding-top: 50px;
+  color: $mainText;
+  font-family: $mainFont;
+  font-size: 28px;
+  font-weight: 600;
+  padding-bottom: 20px;
+  text-align: left;
+}
+
+.columnText{
+  text-align: left;
+  padding-left: 5px;
+  padding-top: 15px;
+  color: $mainText;
+  font-family: $mainFont;
+  font-size: 18px;
+}

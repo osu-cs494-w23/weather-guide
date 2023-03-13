@@ -1,0 +1,67 @@
+@import  "/src/variables" ;
+
+
+.WeatherWrapper{
+  margin-top: 100px;
+  width: 100vw;
+  background-color: $mainText;
+}
+
+.WeatherTitle{
+  width: 800px;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 100px;
+  height: 50px;
+  line-height: 50px;
+  font-family: $mainFont;
+  color: $menuColor;
+  font-size: 44px;
+  font-weight: 600;
+}
+
+.formClasses{
+  padding-top: 50px;
+  padding-bottom: 100px;
+}
+
+.cityInput{
+  font-family: $mainFont;
+  height: 40px;
+  margin: auto;
+  display: block;
+  border: none;
+  padding-left: 60px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 20px;
+  width: 600px;
+  -webkit-appearance: none;
+  outline: none;
+
+}
+
+.submitButton{
+  margin: 50px auto;
+  display: block;
+  background-color: $menuColor;
+  -webkit-appearance: none;
+  outline: none;
+  width: 150px;
+  height: 45px;
+  text-align: center;
+  color: $mainText;
+  font-family: $mainFont;
+  font-size: 22px;
+
+}
+
+.searchIcon{
+
+  font-size: 22px;
+  display: block;
+  position: absolute;
+  margin-left: calc(50vw - 305px);
+  margin-top: 14px;
+}
+

@@ -1,0 +1,82 @@
+@import  "/src/variables" ;
+
+*{
+  overflow-x: hidden;
+}
+
+.bannerWrapper{
+  overflow: hidden;
+  z-index: 0;
+  display: block;
+  height: calc(100vh - 66px);
+  width: 100vw;
+
+}
+
+.line{
+  width: 650px;
+  height: 5px;
+  background-color: white;
+}
+
+.bannerImage{
+  z-index: -4;
+
+  height: calc(110vh - 66px);
+  width: 110vw;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.planeImage{
+  z-index: -1;
+  position: relative;
+  width: 700px;
+  display: block;
+}
+
+.bannerText{
+  z-index: 15;
+  overflow: hidden;
+  text-align: left;
+  position: relative;
+  margin-left: 100px;
+  width: 750px;
+  margin-top: calc(-50vh - 250px);
+}
+
+.title{
+  margin-top: 100px;
+  font-weight: 600;
+  font-size: 100px;
+  color: white;
+  font-family: $mainFont;
+}
+
+.description{
+  margin-top: 50px;
+  font-weight: 600;
+  font-size: 38px;
+  color: white;
+  font-family: $mainFont;
+}
+
+.subDescription{
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 38px;
+  color: white;
+  font-family: $mainFont;
+}
+
+.darkener{
+  z-index: 0;
+  width: 100vw;
+  height: calc(100vh - 66px);
+  background-color: black;
+  opacity: 0.5;
+  position: relative;
+}

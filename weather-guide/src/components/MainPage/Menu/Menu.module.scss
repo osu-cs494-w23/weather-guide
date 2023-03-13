@@ -1,0 +1,41 @@
+@import  "/src/variables" ;
+
+
+.menu{
+  z-index: 10;
+  height: 66px;
+  width: 100vw;
+  background-color: $menuColor;
+}
+
+.logo{
+  height: 66px;
+  float: left;
+}
+
+
+
+.buttonsWrapper{
+
+  margin: auto;
+  display: block;
+  width: 800px;
+}
+
+
+.buttonIcon{
+  padding-right: 10px;
+}
+
+.button{
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none ;
+  font-size: 20px;
+  height: 66px;
+  line-height: 66px;
+  width: 150px;
+  color: $mainText;
+  font-family: $mainFont;
+}
