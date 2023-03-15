@@ -53,9 +53,12 @@ jobs:
         run: npm ci --no-audit
 
   deploy:
+    name: Deploy to GitHub Pages
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     needs: install
     runs-on: ubuntu-latest
 
@@ -75,8 +78,11 @@ jobs:
           path: node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
 
+      - name: DEBUG -- List environment variables
+        run: env
+
       - name: Build app
-        run: CI=false PUBLIC_URL="${{ steps.deployment.outputs.page_url }}" REACT_APP_BASENAME="/final-project-group-18" npm run build
+        run: CI=false PUBLIC_URL="https://osu-cs494-w23.github.io/final-project-group-18/" REACT_APP_BASENAME="/final-project-group-18" npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
