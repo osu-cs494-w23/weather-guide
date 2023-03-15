@@ -76,7 +76,7 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Build app
-        run: PUBLIC_URL="${{ steps.deployment.outputs.page_url }}" REACT_APP_BASENAME="/final-project-group-18" npm run build
+        run: CI=false PUBLIC_URL="${{ steps.deployment.outputs.page_url }}" REACT_APP_BASENAME="/final-project-group-18" npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
