@@ -1,10 +1,15 @@
 import React from 'react';
+import WeatherBroadcast from '../MainPage/WeatherBroadCast/Weather';
+
 
 const Weather = () =>{
 
     return(
         <>
-            Weather
+            <div>
+                <WeatherBroadcast />
+            </div>
+
         </>
     )
 }
