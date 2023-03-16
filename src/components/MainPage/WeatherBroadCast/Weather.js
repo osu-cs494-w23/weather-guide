@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import useWeather from "./useWeather"
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {faSun} from "@fortawesome/free-solid-svg-icons";
+import {faMoon} from "@fortawesome/free-solid-svg-icons";
 
 const months = [
     'January',
@@ -33,6 +34,22 @@ const Weather = () =>{
         setCity('')
     }
 
+    const getHours = (arg) =>{
+        let res = new Date(arg * 1000).getHours()
+        if (res < 10){
+            res = '0' + res
+        }
+        return res
+    }
+
+    const getMinutes = (arg) =>{
+        let res = new Date(arg * 1000).getMinutes()
+        if (res < 10){
+            res = '0' + res
+        }
+        return res
+    }
+
 
     return(
         <div className={classes.WeatherWrapper}>
@@ -40,7 +57,6 @@ const Weather = () =>{
             <form onSubmit={submitForm} className={classes.formClasses}>
                 <FontAwesomeIcon onClick={submitForm} className={classes.searchIcon}  icon={faMagnifyingGlass} />
                 <input value={city} onChange={(e)=>{setCity(e.target.value)}} placeholder={"Location"} className={classes.cityInput}/>
-                <input className={classes.submitButton} value={"Search"}  type={"submit"}/>
                 {response.length !== 0 ?
 
                     <div  className={classes.weatherCardWrapper}>
@@ -88,8 +104,8 @@ const Weather = () =>{
                                 </div>
                                 <div className={classes.lengthWrapper}>
                                     <div className={classes.dayLength}>
-                                        { Math.floor((response.sys.sunset- response.sys.sunrise)/3600)}
-                                        { Math.floor((response.sys.sunset - response.sys.sunrise-Math.floor((response.sys.sunset- response.sys.sunrise)))/60)}
+                                        <span className={classes.fullDay}>{ Math.floor((response.sys.sunset- response.sys.sunrise)/3600)  } hours </span>
+                                        <span className={classes.fullDay}>{ Math.floor((response.sys.sunset - response.sys.sunrise-Math.floor((response.sys.sunset- response.sys.sunrise)/3600)*3600)/60)+1} minutes </span>
                                     </div>
                                     <FontAwesomeIcon className={classes.sunRiseIcon} size={"3x"}  icon={faSun} />
                                 </div>
@@ -97,16 +113,15 @@ const Weather = () =>{
                                 <div className={classes.sunriseWrapper}>
                                     <div className={classes.sunriseLine}></div>
                                     <div className={classes.time}>
-                                        {new Date(response.sys.sunrise * 1000).getHours()}:
-                                        {new Date(response.sys.sunrise * 1000).getMinutes()} AM
+                                        {getHours(response.sys.sunrise)}:{getMinutes(response.sys.sunrise)}
+
                                     </div>
                                     <div className={classes.timeText}>
                                         Rise
                                     </div>
                                     <div className={classes.sunriseLine}></div>
                                     <div className={classes.time}>
-                                        {new Date(response.sys.sunset * 1000).getHours()}:
-                                        {new Date(response.sys.sunset * 1000).getMinutes()} PM
+                                        {getHours(response.sys.sunset)}:{getMinutes(response.sys.sunset)}
                                     </div>
                                     <div className={classes.timeText}>
                                         Set
@@ -117,12 +132,29 @@ const Weather = () =>{
                                 <div className={classes.subtitle}>
                                     Nighttime
                                 </div>
-                                <FontAwesomeIcon className={classes.sunRiseIcon} size={"4x"}  icon={faSun} />
+                                <div className={classes.lengthWrapper}>
+                                    <div className={classes.dayLength}>
+                                        <span className={classes.fullDay}>{24- Math.ceil((response.sys.moonrise- response.sys.moonset)/3600)  } hours </span>
+                                        <span className={classes.fullDay}>{ 60 - Math.ceil((response.sys.moonrise - response.sys.moonset-Math.floor((response.sys.moonrise- response.sys.moonset)/3600)*3600)/60)} minutes </span>
+                                    </div>
+                                    <FontAwesomeIcon className={classes.sunRiseIcon} size={"3x"}  icon={faMoon} />
+                                </div>
 
-                                <div className={classes.time}>
-                                    {new Date(response.sys.sunrise * 1000).getHours()}
-                                    {new Date(response.sys.sunrise * 1000).getMinutes()}
-                                    {new Date(response.sys.sunrise * 1000).getSeconds()}
+                                <div className={classes.sunriseWrapper}>
+                                    <div className={classes.sunriseLine}></div>
+                                    <div className={classes.time}>
+                                        {getHours(response.sys.moonrise)}:{getMinutes(response.sys.moonrise)}
+                                    </div>
+                                    <div className={classes.timeText}>
+                                        Rise
+                                    </div>
+                                    <div className={classes.sunriseLine}></div>
+                                    <div className={classes.time}>
+                                        {getHours(response.sys.moonset)}:{getMinutes(response.sys.moonset)}
+                                    </div>
+                                    <div className={classes.timeText}>
+                                        Set
+                                    </div>
                                 </div>
                             </div>
                         </div>

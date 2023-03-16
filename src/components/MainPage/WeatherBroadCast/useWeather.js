@@ -50,6 +50,8 @@ const useWeather = ((query) =>{
                 }else{
                     setError(false)
                     responseBody = await res.json()
+                    responseBody.sys.moonset = responseBody.sys.sunrise - Math.floor(Math.random() * 60*60) - 60*60;
+                    responseBody.sys.moonrise = responseBody.sys.sunset + Math.floor(Math.random() * 60*60) + 60*60;
                     setWeatherResponse(responseBody)
                 }
             } catch (e) {
