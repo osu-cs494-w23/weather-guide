@@ -42,7 +42,7 @@ const useWeather = ((query) =>{
                 let long = r[0].lon
                 console.log(long)
                 const res = await fetch(
-                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APIKEY}`,
+                    `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APIKEY}`,
                 )
 
                 if (res.status !== 200){
