@@ -14,7 +14,7 @@ const useWeather = ((query) =>{
             setLoading(true)
             try {
                 const response = await fetch(
-                    `http://api.openweathermap.org/geo/1.0/direct?q=${query}&appid=${APIKEY}`,
+                    `https://api.openweathermap.org/geo/1.0/direct?q=${query}&appid=${APIKEY}`,
                     { signal: controller.signal }
                 )
 
@@ -42,7 +42,7 @@ const useWeather = ((query) =>{
                 let long = r[0].lon
                 console.log(long)
                 const res = await fetch(
-                    `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APIKEY}`,
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APIKEY}`,
                 )
 
                 if (res.status !== 200){
