@@ -14,7 +14,7 @@ const useWeather = ((query) =>{
             setLoading(true)
             try {
                 const response = await fetch(
-                    `http://api.openweathermap.org/geo/1.0/direct?q=${query}&appid=${APIKEY}`,
+                    `https://api.openweathermap.org/geo/1.0/direct?q=${query}&appid=${APIKEY}`,
                     { signal: controller.signal }
                 )
 
