@@ -67,7 +67,7 @@ const Weather = () =>{
                                     Current Weather
                                 </div>
                                 <div className={classes.date}>
-                                    {new Date(response.dt * 1000).getDate()} {months[new Date(response.dt * 1000).getMonth()-1]} {new Date(response.dt * 1000).getFullYear()}
+                                    {new Date(response.current.dt * 1000).getDate()} {months[new Date(response.current.dt  * 1000).getMonth()-1]} {new Date(response.current.dt  * 1000).getFullYear()}
                                 </div>
                                 <div className={classes.iconWrapper}>
                                     <div className={classes.temp}>
