@@ -57,6 +57,7 @@ const Weather = () =>{
             <form onSubmit={submitForm} className={classes.formClasses}>
                 <FontAwesomeIcon onClick={submitForm} className={classes.searchIcon}  icon={faMagnifyingGlass} />
                 <input value={city} onChange={(e)=>{setCity(e.target.value)}} placeholder={"Location"} className={classes.cityInput}/>
+
                 {response.length !== 0 ?
 
                     <div  className={classes.weatherCardWrapper}>
@@ -160,7 +161,7 @@ const Weather = () =>{
                         </div>
                     </div>
                     :
-                    <></>
+                    <input className={classes.submitButton} value={"Search"}  type={"submit"}/>
                 }
 
             </form>
