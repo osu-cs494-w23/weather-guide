@@ -42,7 +42,7 @@ const useWeather = ((query) =>{
                 let long = r[0].lon
                 console.log(long)
                 const res = await fetch(
-                    `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${APIKEY}`,
+                    `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&appid=${APIKEY}`,
                 )
 
                 if (res.status !== 200){
@@ -50,8 +50,8 @@ const useWeather = ((query) =>{
                 }else{
                     setError(false)
                     responseBody = await res.json()
-                    responseBody.sys.moonset = responseBody.sys.sunrise - Math.floor(Math.random() * 60*60) - 60*60;
-                    responseBody.sys.moonrise = responseBody.sys.sunset + Math.floor(Math.random() * 60*60) + 60*60;
+                    responseBody.current.moonset = responseBody.current.sunrise - Math.floor(Math.random() * 60*60) - 60*60;
+                    responseBody.current.moonrise = responseBody.current.sunset + Math.floor(Math.random() * 60*60) + 60*60;
                     setWeatherResponse(responseBody)
                 }
             } catch (e) {

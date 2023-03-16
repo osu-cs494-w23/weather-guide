@@ -71,29 +71,29 @@ const Weather = () =>{
                                 </div>
                                 <div className={classes.iconWrapper}>
                                     <div className={classes.temp}>
-                                        {Math.round(response.main.temp - 273.15)}
+                                        {Math.round(response.current.temp - 273.15)}
                                         <span className={classes.degree}>&#176;</span>
                                     </div>
-                                    <img className={classes.icon}  src={`http://openweathermap.org/img/wn/${response.weather[0].icon}@4x.png`}/>
+                                    <img className={classes.icon}  src={`http://openweathermap.org/img/wn/${response.current.weather[0].icon}@4x.png`}/>
                                 </div>
                                 <div className={classes.weatherType}>
-                                    {response.weather[0].main}
+                                    {response.current.weather[0].main}
                                 </div>
                             </div>
                             <div style={{width:'350px'}} className={classes.cardColumn}>
                                 <div className={classes.topRow + " " + classes.weatherInfoRow}>
                                     <div className={classes.cardRowTitle}>Wind Speed</div>
-                                    <div className={classes.rowInfo}> {response.wind.speed}  meter/s</div>
+                                    <div className={classes.rowInfo}> {response.current.wind_speed}  meter/s</div>
                                     <div className={classes.cardLine}></div>
                                 </div>
                                 <div className={classes.topRow + " " + classes.weatherInfoRow}>
                                     <div className={classes.cardRowTitle}>Wind Direction</div>
-                                    <div className={classes.rowInfo}> {response.wind.deg}  deg</div>
+                                    <div className={classes.rowInfo}> {response.current.wind_deg}  deg</div>
                                     <div className={classes.cardLine}></div>
                                 </div>
                                 <div className={classes.topRow + " " + classes.weatherInfoRow}>
-                                    <div className={classes.cardRowTitle}>Visibility </div>
-                                    <div className={classes.rowInfo}> {response.visibility}  meters</div>
+                                    <div className={classes.cardRowTitle}>Gust </div>
+                                    <div className={classes.rowInfo}> {response.current.wind_gust}  meter/s</div>
                                     <div className={classes.cardLine}></div>
                                 </div>
                             </div>
@@ -105,8 +105,8 @@ const Weather = () =>{
                                 </div>
                                 <div className={classes.lengthWrapper}>
                                     <div className={classes.dayLength}>
-                                        <span className={classes.fullDay}>{ Math.floor((response.sys.sunset- response.sys.sunrise)/3600)  } hours </span>
-                                        <span className={classes.fullDay}>{ Math.floor((response.sys.sunset - response.sys.sunrise-Math.floor((response.sys.sunset- response.sys.sunrise)/3600)*3600)/60)+1} minutes </span>
+                                        <span className={classes.fullDay}>{ Math.floor((response.current.sunset- response.current.sunrise)/3600)  } hours </span>
+                                        <span className={classes.fullDay}>{ Math.floor((response.current.sunset - response.current.sunrise-Math.floor((response.current.sunset- response.current.sunrise)/3600)*3600)/60)+1} minutes </span>
                                     </div>
                                     <FontAwesomeIcon className={classes.sunRiseIcon} size={"3x"}  icon={faSun} />
                                 </div>
@@ -114,7 +114,7 @@ const Weather = () =>{
                                 <div className={classes.sunriseWrapper}>
                                     <div className={classes.sunriseLine}></div>
                                     <div className={classes.time}>
-                                        {getHours(response.sys.sunrise)}:{getMinutes(response.sys.sunrise)}
+                                        {getHours(response.current.sunrise)}:{getMinutes(response.current.sunrise)}
 
                                     </div>
                                     <div className={classes.timeText}>
@@ -122,7 +122,7 @@ const Weather = () =>{
                                     </div>
                                     <div className={classes.sunriseLine}></div>
                                     <div className={classes.time}>
-                                        {getHours(response.sys.sunset)}:{getMinutes(response.sys.sunset)}
+                                        {getHours(response.current.sunset)}:{getMinutes(response.current.sunset)}
                                     </div>
                                     <div className={classes.timeText}>
                                         Set
@@ -135,8 +135,8 @@ const Weather = () =>{
                                 </div>
                                 <div className={classes.lengthWrapper}>
                                     <div className={classes.dayLength}>
-                                        <span className={classes.fullDay}>{24- Math.ceil((response.sys.moonrise- response.sys.moonset)/3600)  } hours </span>
-                                        <span className={classes.fullDay}>{ 60 - Math.ceil((response.sys.moonrise - response.sys.moonset-Math.floor((response.sys.moonrise- response.sys.moonset)/3600)*3600)/60)} minutes </span>
+                                        <span className={classes.fullDay}>{24- Math.ceil((response.current.moonrise- response.current.moonset)/3600)  } hours </span>
+                                        <span className={classes.fullDay}>{ 60 - Math.ceil((response.current.moonrise - response.current.moonset-Math.floor((response.current.moonrise- response.current.moonset)/3600)*3600)/60)} minutes </span>
                                     </div>
                                     <FontAwesomeIcon className={classes.sunRiseIcon} size={"3x"}  icon={faMoon} />
                                 </div>
@@ -144,14 +144,14 @@ const Weather = () =>{
                                 <div className={classes.sunriseWrapper}>
                                     <div className={classes.sunriseLine}></div>
                                     <div className={classes.time}>
-                                        {getHours(response.sys.moonrise)}:{getMinutes(response.sys.moonrise)}
+                                        {getHours(response.current.moonrise)}:{getMinutes(response.current.moonrise)}
                                     </div>
                                     <div className={classes.timeText}>
                                         Rise
                                     </div>
                                     <div className={classes.sunriseLine}></div>
                                     <div className={classes.time}>
-                                        {getHours(response.sys.moonset)}:{getMinutes(response.sys.moonset)}
+                                        {getHours(response.current.moonset)}:{getMinutes(response.current.moonset)}
                                     </div>
                                     <div className={classes.timeText}>
                                         Set
