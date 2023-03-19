@@ -5,11 +5,11 @@ import { Helmet } from 'react-helmet';
 import Map from './Map/Map';
 import classes from './Plane.module.scss';
 
-const AIRSPEED_KT = 105;
+const AIRSPEED_KT = 110;
 
 const hoursToHoursMinutes = (hours) => {
     const h = Math.floor(hours);
-    const m = Math.round((hours - h) * 60).toString().padStart(2, '0');
+    const m = Math.floor((hours - h) * 60).toString().padStart(2, '0');
     return `${h}h${m}m`;
 }
 
@@ -56,7 +56,7 @@ const Plane = () => {
                     </div>
                 </div>
 
-                <Map departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={i => setRoute(i)} />
+                <Map departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={setRoute} />
             </div>
         </>
     )
