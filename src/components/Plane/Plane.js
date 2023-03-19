@@ -1,10 +1,16 @@
 import React from 'react';
+import Map from './Map/Map';
+import classes from './Plane.module.scss';
 
-const Plane = () =>{
-
-    return(
+const Plane = () => {
+    return (
         <>
-            Plane
+            <div className={classes.planeContainer}>
+                <div className={classes.planeRouteForm}>
+
+                </div>
+                <Map />
+            </div>
         </>
     )
 }

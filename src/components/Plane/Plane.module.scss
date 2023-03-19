@@ -1,0 +1,15 @@
+.planeContainer {
+  display: flex;
+  flex-direction: row;
+
+  height: 50vw;
+}
+
+.planeRouteForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
