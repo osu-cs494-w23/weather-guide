@@ -82,7 +82,7 @@ jobs:
         run: env
 
       - name: Build app
-        run: CI=false PUBLIC_URL="https://osu-cs494-w23.github.io/final-project-group-18/" REACT_APP_BASENAME="/final-project-group-18" npm run build
+        run: CI=false PUBLIC_URL="https://osu-cs494-w23.github.io/weather-guide/" REACT_APP_BASENAME="/weather-guide" npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
