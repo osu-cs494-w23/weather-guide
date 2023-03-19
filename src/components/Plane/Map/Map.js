@@ -8,6 +8,8 @@ import airports from '../data/us_airports.json';
 import winds from '../data/winds_aloft.json';
 import classes from './Map.module.scss';
 
+const warningMessage = 'NOT FOR NAVIGATIONAL USE.'
+
 const OPENWEATHERMAP_APPID = '9de243494c0b295cca9337e1e96b00e2';
 const M_TO_NM = 0.000539957;
 
@@ -195,23 +197,23 @@ const Map = (props) => {
                     {/* Map Layers */}
 
                     <LayersControl.BaseLayer name="Hybrid VFR" checked>
-                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/vfrc/{z}/{y}/{x}.jpg`} tms={true} />
+                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/vfrc/{z}/{y}/{x}.jpg`} attribution={warningMessage} tms={true} />
                     </LayersControl.BaseLayer>
 
                     <LayersControl.BaseLayer name="VFR Sectional">
-                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/sectc/{z}/{y}/{x}.jpg`} tms={true} />
+                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/sectc/{z}/{y}/{x}.jpg`} attribution={warningMessage} tms={true} />
                     </LayersControl.BaseLayer>
 
                     <LayersControl.BaseLayer name="Low IFR">
-                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/ifrlc/{z}/{y}/{x}.jpg`} tms={true} />
+                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/ifrlc/{z}/{y}/{x}.jpg`} attribution={warningMessage} tms={true} />
                     </LayersControl.BaseLayer>
 
                     <LayersControl.BaseLayer name="High IFR">
-                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/ehc/{z}/{y}/{x}.jpg`} tms={true} />
+                        <TileLayer url={`https://vfrmap.com/${cycle}/tiles/ehc/{z}/{y}/{x}.jpg`} attribution={warningMessage} tms={true} />
                     </LayersControl.BaseLayer>
 
                     <LayersControl.BaseLayer name="OpenStreetMap">
-                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution={warningMessage} />
                     </LayersControl.BaseLayer>
 
                     {/* Weather Layers */}
