@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import './Weather.css';
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import WeatherBroadcast from '../MainPage/WeatherBroadCast/Weather';
+import './Weather.css';
 
 const APIKEY = '0efd39a5159ec4ff5bd0154841da469a';
 
@@ -17,7 +18,7 @@ const Weather = () => {
     if (city) {
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}`;
       const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${APIKEY}`;
-      
+
       Promise.all([fetch(weatherUrl), fetch(forecastUrl)])
         .then(([weatherResponse, forecastResponse]) => {
           return Promise.all([weatherResponse.json(), forecastResponse.json()]);
@@ -32,6 +33,11 @@ const Weather = () => {
 
   return (
     <>
+      <Helmet>
+          <title>Weather | Weather Guide</title>
+          <meta name="description" content="Get the big picture with Weather Guide!" />
+      </Helmet>
+
       <div>
         {weather &&
           <div>
