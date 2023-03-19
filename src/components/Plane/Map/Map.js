@@ -1,10 +1,12 @@
+import * as turf from '@turf/turf';
+import * as geomag from 'geomag';
 import L from 'leaflet';
+import * as LGeodesic from 'leaflet.geodesic';
 import React, { useEffect, useMemo } from 'react';
 import { FeatureGroup, LayersControl, MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import airports from '../data/us_airports.json';
+import winds from '../data/winds_aloft.json';
 import classes from './Map.module.scss';
-import * as turf from '@turf/turf';
-import * as LGeodesic from 'leaflet.geodesic';
 
 const OPENWEATHERMAP_APPID = '9de243494c0b295cca9337e1e96b00e2';
 const M_TO_NM = 0.000539957;
@@ -28,6 +30,77 @@ const getUtcTime = () => {
     return formattedDate;
 }
 
+const distanceToGeodesicLine = (coord, geodesicLine) => {
+    const point = turf.point(coord);
+    const line = turf.lineString(geodesicLine.getLatLngs()[0].map(latlng => [latlng.lng, latlng.lat]));
+    const nearestPoint = turf.nearestPointOnLine(line, point);
+    return turf.distance(point, nearestPoint, { units: 'meters' });
+}
+
+const windToUV = (wspd, wdir) => {
+    const wdirRad = (wdir * Math.PI) / 180;
+    const u = -wspd * Math.sin(wdirRad);
+    const v = -wspd * Math.cos(wdirRad);
+    return { u, v };
+}
+
+const uvToWind = (u, v) => {
+    const wspd = Math.sqrt(u * u + v * v);
+    const wdir = (Math.atan2(-u, -v) * 180) / Math.PI;
+    return { wdir: wdir < 0 ? wdir + 360 : wdir, wspd };
+}
+
+const combineWindsAloft = (winds) => {
+    const { u, v } = winds.reduce((acc, wind) => {
+        const { u, v } = windToUV(wind.properties.wspd, wind.properties.wdir);
+
+        acc.u += u;
+        acc.v += v;
+
+        return acc;
+    }, { u: 0, v: 0 });
+
+    let { wdir, wspd } = uvToWind(u, v);
+    wspd = wspd / winds.length;
+
+    return { wdir, wspd };
+}
+
+const initialTrueBearing = (lat1, lon1, lat2, lon2) => {
+    const φ1 = (lat1 * Math.PI) / 180;
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const y = Math.sin(Δλ) * Math.cos(φ2);
+    const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    const θ = Math.atan2(y, x);
+
+    const initialBearing = ((θ * 180) / Math.PI + 360) % 360;
+    return initialBearing;
+}
+
+const calculateMagneticBearing = (geodesicLine) => {
+    const geodesicLineLatLngs = geodesicLine.getLatLngs()[0];
+    const magneticBearings = [];
+
+    for (let i = 0; i < geodesicLineLatLngs.length - 1; i++) {
+        const lat1 = geodesicLineLatLngs[i].lat;
+        const lon1 = geodesicLineLatLngs[i].lng;
+        const lat2 = geodesicLineLatLngs[i + 1].lat;
+        const lon2 = geodesicLineLatLngs[i + 1].lng;
+
+        const trueBearing = initialTrueBearing(lat1, lon1, lat2, lon2);
+        const magneticDeclination1 = geomag.field(lat1, lon1).declination;
+        const magneticDeclination2 = geomag.field(lat2, lon2).declination;
+        const averageMagneticDeclination = (magneticDeclination1 + magneticDeclination2) / 2;
+        const magneticBearing = (trueBearing - averageMagneticDeclination + 360) % 360;
+
+        magneticBearings.push(magneticBearing);
+    }
+
+    return magneticBearings;
+}
+
 const PathLayer = (props) => {
     const map = useMap();
 
@@ -46,6 +119,9 @@ const PathLayer = (props) => {
             const departurePoint = L.latLng(departure.lat, departure.lon);
             const arrivalPoint = L.latLng(arrival.lat, arrival.lon);
 
+            console.log(departure.lat, departure.lon)
+            console.log(arrival.lat, arrival.lon)
+
             // const path = L.polyline([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
             const path = new LGeodesic.GeodesicLine([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
             path.addTo(map);
@@ -62,11 +138,27 @@ const PathLayer = (props) => {
 
             const segmentLength = turf.distance(from, to, { units: 'meters' }) * M_TO_NM;
 
+            const orderedWinds = winds.features.sort((a, b) => {
+                return distanceToGeodesicLine(a.geometry.coordinates, path) - distanceToGeodesicLine(b.geometry.coordinates, path);
+            });
+
+            const magneticBearings = calculateMagneticBearing(path);
+            const avgMagneticBearing = magneticBearings.reduce((acc, bearing) => acc + bearing, 0) / magneticBearings.length;
+
+            const absoluteWinds = combineWindsAloft(orderedWinds.slice(0, 3));
+
+            // calculate wind impact on ground speed
+            const tailwindComponent = -absoluteWinds.wspd * Math.cos((absoluteWinds.wdir - avgMagneticBearing) * Math.PI / 180);
+            console.log(tailwindComponent)
+
             if (onRouteUpdate) {
                 onRouteUpdate({
                     departure: departure.ICAO,
                     arrival: arrival.ICAO,
                     length: segmentLength,
+                    magneticBearing: avgMagneticBearing,
+                    absoluteWinds: absoluteWinds,
+                    tailwindComponent: tailwindComponent,
                 });
             }
 

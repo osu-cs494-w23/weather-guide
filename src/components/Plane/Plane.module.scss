@@ -34,3 +34,17 @@
   justify-content: center;
   align-items: center;
 }
+
+.planeRouteFormInputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  .planeRouteFlipIcon {
+    font-size: 24px;
+    // color: $mainColor;
+    cursor: pointer;
+  }
+}
