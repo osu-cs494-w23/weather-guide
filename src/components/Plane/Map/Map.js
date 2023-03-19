@@ -4,7 +4,26 @@ import { FeatureGroup, LayersControl, MapContainer, Marker, Popup, TileLayer, us
 import airports from '../data/us_airports.json';
 import classes from './Map.module.scss';
 
+const OPENWEATHERMAP_APPID = '9de243494c0b295cca9337e1e96b00e2';
+
 const kcvo = airports.find(airport => airport.ICAO === 'KCVO');
+
+const getUtcTime = () => {
+    // Get current time in UTC
+    const now = new Date();
+
+    // 12 minute delay in radar data
+    const utcTimestamp = now.getTime() - 12 * 60 * 1000;
+    const utcDate = new Date(utcTimestamp);
+
+    // Round down to nearest 10 minutes
+    utcDate.setMinutes(Math.floor(utcDate.getMinutes() / 10) * 10);
+
+    // Format the date as a string
+    const formattedDate = utcDate.toISOString().slice(0, 16);
+
+    return formattedDate;
+}
 
 const PathLayer = (props) => {
     const map = useMap();
@@ -87,33 +106,23 @@ const Map = (props) => {
                     {/* Weather Layers */}
 
                     <LayersControl.Overlay name="Radar" checked>
-                        <TileLayer url="https://a.sat.owm.io/maps/2.0/radar/{z}/{x}/{y}?appid=9de243494c0b295cca9337e1e96b00e2&day=2023-03-19T04:00" />
+                        <TileLayer url={`https://a.sat.owm.io/maps/2.0/radar/{z}/{x}/{y}?appid=${OPENWEATHERMAP_APPID}&day=${getUtcTime()}`} />
                     </LayersControl.Overlay>
 
                     <LayersControl.Overlay name="Clouds">
-                        <TileLayer url="https://a.sat.owm.io/vane/2.0/weather/CL/{z}/{x}/{y}?appid=9de243494c0b295cca9337e1e96b00e2" />
+                        <TileLayer url={`https://a.sat.owm.io/vane/2.0/weather/CL/{z}/{x}/{y}?appid=${OPENWEATHERMAP_APPID}`} />
                     </LayersControl.Overlay>
 
                     <LayersControl.Overlay name="Wind" checked>
-                        <TileLayer url="https://a.sat.owm.io/vane/2.0/weather/WND/{z}/{x}/{y}?appid=9de243494c0b295cca9337e1e96b00e2&fill_bound=true" />
+                        <TileLayer url={`https://a.sat.owm.io/vane/2.0/weather/WND/{z}/{x}/{y}?appid=${OPENWEATHERMAP_APPID}&fill_bound=true`} />
                     </LayersControl.Overlay>
 
                     <LayersControl.Overlay name="Temperature">
-                        <TileLayer url="https://a.sat.owm.io/vane/2.0/weather/TA2/{z}/{x}/{y}?appid=9de243494c0b295cca9337e1e96b00e2&fill_bound=true" />
+                        <TileLayer url={`https://a.sat.owm.io/vane/2.0/weather/TA2/{z}/{x}/{y}?appid=${OPENWEATHERMAP_APPID}&fill_bound=true`} />
                     </LayersControl.Overlay>
                 </LayersControl>
 
                 <PathLayer departureAirport={departureAirport} arrivalAirport={arrivalAirport} />
-
-                {/* <FeatureGroup>
-                    {airports.map(airport => (
-                        <Marker key={airport.ICAO} position={[Number(airport.lat), Number(airport.lon)]}>
-                            <Popup>
-                                {airport.ICAO}: {airport.name}
-                            </Popup>
-                        </Marker>
-                    ))}
-                </FeatureGroup> */}
             </MapContainer>
         </>
     )
