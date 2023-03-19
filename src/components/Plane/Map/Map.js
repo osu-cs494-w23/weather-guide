@@ -1,10 +1,13 @@
 import React from 'react';
 import { LayersControl, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import classes from './Map.module.scss';
+import airports from '../data/us_airports.json';
+
+const kcvo = airports.find(airport => airport.ICAO === 'KCVO');
 
 const Map = () => {
     const cycle = '20230223'
-    const center = [44.5646, -123.2620];
+    const center = [Number(kcvo.lat), Number(kcvo.lon)];
 
     return (
         <>
@@ -47,11 +50,13 @@ const Map = () => {
                     </LayersControl.Overlay>
                 </LayersControl>
 
-                <Marker position={center}>
-                    <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
+                {airports.map(airport => (
+                    <Marker key={airport.ICAO} position={[Number(airport.lat), Number(airport.lon)]}>
+                        <Popup>
+                            {airport.ICAO}: {airport.name}
+                        </Popup>
+                    </Marker>
+                ))}
             </MapContainer>
         </>
     )
