@@ -21,8 +21,8 @@ const Banner = () =>{
 
 
 
-    let marginBackgroundLeft = - window.innerWidth*0.05 + coords.x/50
-    let marginBackgroundTop = -window.innerHeight*0.6 + coords.y/40
+    let marginBackgroundLeft = - window.innerWidth*0.06 + coords.x/50
+    let marginBackgroundTop = -window.innerHeight*0.7 + coords.y/40
 
     let marginLeft =  0.4*window.innerWidth + coords.x/15
 

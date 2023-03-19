@@ -6,7 +6,7 @@ import Weather from "./WeatherBroadCast/Weather";
 
 const MainPage = () => {
     return (
-        <>
+        <div >
             <Helmet>
                 <title>Weather Guide</title>
                 <meta name="description" content="Land, sea or air, we'll help you get there!" />
@@ -16,7 +16,7 @@ const MainPage = () => {
             <SelectMode></SelectMode>
             <Weather></Weather>
 
-        </>
+        </div>
     )
 
 }
