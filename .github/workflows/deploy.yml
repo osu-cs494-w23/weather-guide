@@ -78,9 +78,6 @@ jobs:
           path: node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
 
-      - name: DEBUG -- List environment variables
-        run: env
-
       - name: Build app
         run: CI=false PUBLIC_URL="https://osu-cs494-w23.github.io/weather-guide/" REACT_APP_BASENAME="/weather-guide" npm run build
 
