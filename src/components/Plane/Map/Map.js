@@ -166,7 +166,7 @@ const PathLayer = (props) => {
                 map.removeLayer(path);
             }
         }
-    }, [map, departureAirport, arrivalAirport]);
+    }, [map, departureAirport, arrivalAirport, onRouteUpdate]);
 
     return (
         <FeatureGroup>

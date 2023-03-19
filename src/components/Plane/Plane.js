@@ -7,6 +7,12 @@ import classes from './Plane.module.scss';
 
 const AIRSPEED_KT = 105;
 
+const hoursToHoursMinutes = (hours) => {
+    const h = Math.floor(hours);
+    const m = Math.round((hours - h) * 60).toString().padStart(2, '0');
+    return `${h}h${m}m`;
+}
+
 const Plane = () => {
     const [departureAirport, setDepartureAirport] = useState('')
     const [arrivalAirport, setArrivalAirport] = useState('')
@@ -46,7 +52,7 @@ const Plane = () => {
 
                     <div className={classes.planeRouteInfo}>
                         <div>{(route?.length ?? 0).toFixed(2)} nm</div>
-                        <div>{((route?.length ?? 0) / groundSpeed).toFixed(1)} hours @ {airspeed.toFixed(0)} kt ({wind.speed.toFixed(0)} kt {wind.component})</div>
+                        <div>{hoursToHoursMinutes((route?.length ?? 0) / groundSpeed)} @ {airspeed.toFixed(0)} kt ({wind.speed.toFixed(0)} kt {wind.component})</div>
                     </div>
                 </div>
 
