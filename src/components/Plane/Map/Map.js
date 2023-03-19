@@ -3,8 +3,11 @@ import React, { useEffect, useMemo } from 'react';
 import { FeatureGroup, LayersControl, MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import airports from '../data/us_airports.json';
 import classes from './Map.module.scss';
+import * as turf from '@turf/turf';
+import * as LGeodesic from 'leaflet.geodesic';
 
 const OPENWEATHERMAP_APPID = '9de243494c0b295cca9337e1e96b00e2';
+const M_TO_NM = 0.000539957;
 
 const kcvo = airports.find(airport => airport.ICAO === 'KCVO');
 
@@ -28,7 +31,7 @@ const getUtcTime = () => {
 const PathLayer = (props) => {
     const map = useMap();
 
-    const { departureAirport, arrivalAirport } = props;
+    const { departureAirport, arrivalAirport, onRouteUpdate } = props;
 
     const departure = useMemo(() => airports.find(airport => airport.ICAO === departureAirport), [departureAirport]);
     const arrival = useMemo(() => airports.find(airport => airport.ICAO === arrivalAirport), [arrivalAirport]);
@@ -43,13 +46,29 @@ const PathLayer = (props) => {
             const departurePoint = L.latLng(departure.lat, departure.lon);
             const arrivalPoint = L.latLng(arrival.lat, arrival.lon);
 
-            const path = L.polyline([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
+            // const path = L.polyline([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
+            const path = new LGeodesic.GeodesicLine([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
             path.addTo(map);
 
             map.fitBounds([
                 [departure.lat, departure.lon],
                 [arrival.lat, arrival.lon]
             ], { padding: [25, 25] });
+
+            // Calculate the distance between two points
+            // Turf uses [lon, lat] for some reason
+            const from = turf.point([departure.lon, departure.lat]);
+            const to = turf.point([arrival.lon, arrival.lat]);
+
+            const segmentLength = turf.distance(from, to, { units: 'meters' }) * M_TO_NM;
+
+            if (onRouteUpdate) {
+                onRouteUpdate({
+                    departure: departure.ICAO,
+                    arrival: arrival.ICAO,
+                    length: segmentLength,
+                });
+            }
 
             return () => {
                 map.removeLayer(path);
@@ -71,7 +90,7 @@ const PathLayer = (props) => {
 }
 
 const Map = (props) => {
-    const { departureAirport, arrivalAirport } = props;
+    const { departureAirport, arrivalAirport, onRouteUpdate } = props;
 
     const cycle = '20230223'
     const center = [Number(kcvo.lat), Number(kcvo.lon)];
@@ -122,7 +141,7 @@ const Map = (props) => {
                     </LayersControl.Overlay>
                 </LayersControl>
 
-                <PathLayer departureAirport={departureAirport} arrivalAirport={arrivalAirport} />
+                <PathLayer departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={onRouteUpdate} />
             </MapContainer>
         </>
     )
