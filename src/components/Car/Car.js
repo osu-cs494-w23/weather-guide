@@ -9,12 +9,11 @@ const Car = () => {
     const [arrivingCity, setarrivingCity] = useState('')
     const [result, setResult] = useState('')
 
-    useEffect(() => {
-        if (departingCity && arrivingCity) {
-            console.log("data read")
-            setResult(<CarResult departingCity={departingCity} arrivingCity={arrivingCity} ev={true}></CarResult>)
-        }
-    })
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(departingCity, arrivingCity)
+        setResult(<CarResult departingCity={departingCity} arrivingCity={arrivingCity} ev={true}></CarResult>)
+    }
 
     return (
         <>
@@ -28,10 +27,13 @@ const Car = () => {
             </div>
 
             <div className={classes.inputContainer}>
-                <p>I want to drive from:</p>
-                <input className={classes.cityInput} placeholder="Departing City" value={departingCity} onChange={e => setDepartingCity(e.target.value)}/>
-                <p>To:</p>
-                <input className={classes.cityInput} placeholder="Arriving City" value={arrivingCity} onChange={e => setarrivingCity(e.target.value)}/>
+                <form onSubmit = {handleSubmit}>
+                    <p>I want to drive from:</p>
+                    <input className={classes.cityInput} placeholder="Departing City" value={departingCity} onChange={e => setDepartingCity(e.target.value)}/>
+                    <p>To:</p>
+                    <input className={classes.cityInput} placeholder="Arriving City" value={arrivingCity} onChange={e => setarrivingCity(e.target.value)}/>
+                    <button type = 'submit' className={classes.submitButton}>Submit</button>
+                </form>
             </div>
             <div className={classes.resultContainer}>
                 {result && <p>Here's your result: {result} </p>}
