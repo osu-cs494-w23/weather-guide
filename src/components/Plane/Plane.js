@@ -82,7 +82,7 @@ const Plane = () => {
                     )}
                 </div>
 
-                <Map departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={setRoute} />
+                <Map altitude={altitude} departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={setRoute} />
             </div>
         </>
     )

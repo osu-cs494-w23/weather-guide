@@ -5,7 +5,7 @@ import * as LGeodesic from 'leaflet.geodesic';
 import React, { useEffect, useMemo } from 'react';
 import { FeatureGroup, LayersControl, MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import airports from '../data/us_airports.json';
-import winds from '../data/winds_aloft.json';
+import useWinds from '../useWinds';
 import classes from './Map.module.scss';
 
 const warningMessage = 'NOT FOR NAVIGATIONAL USE.'
@@ -52,9 +52,36 @@ const uvToWind = (u, v) => {
     return { wdir: wdir < 0 ? wdir + 360 : wdir, wspd };
 }
 
-const combineWindsAloft = (winds) => {
+const altitudes = [3000, 6000, 9000, 12000, 18000, 24000, 30000, 34000, 39000]
+
+const roundAltitude = (altitude) => {
+    let roundedAltitude = altitudes.reduce((acc, alt) => {
+        if (Math.abs(alt - altitude) < Math.abs(acc - altitude)) {
+            return alt;
+        }
+
+        return acc;
+    }, 0);
+
+    if (roundedAltitude === 0) {
+        roundedAltitude = Math.min(...altitudes);
+    }
+
+    return roundedAltitude;
+}
+
+const combineWindsAloft = (winds, altitude = 6000) => {
+    const roundedAltitude = roundAltitude(altitude);
+
     const { u, v } = winds.reduce((acc, wind) => {
-        const { u, v } = windToUV(wind.properties.wspd, wind.properties.wdir);
+        const windSpeed = Number(wind[1].winds[roundedAltitude].windSpeedKnots);
+        const windDirection = Number(wind[1].winds[roundedAltitude].windDirectionDegrees);
+
+        if (isNaN(windSpeed) || isNaN(windDirection)) {
+            return acc;
+        }
+
+        const { u, v } = windToUV(wind[1].winds[roundedAltitude].windSpeedKnots, wind[1].winds[roundedAltitude].windDirectionDegrees);
 
         acc.u += u;
         acc.v += v;
@@ -105,11 +132,37 @@ const calculateMagneticBearing = (geodesicLine) => {
 
 const PathLayer = (props) => {
     const map = useMap();
+    const winds = useWinds();
 
-    const { departureAirport, arrivalAirport, onRouteUpdate } = props;
+    const { altitude, departureAirport, arrivalAirport, onRouteUpdate } = props;
 
     const departure = useMemo(() => airports.find(airport => airport.ICAO === departureAirport), [departureAirport]);
     const arrival = useMemo(() => airports.find(airport => airport.ICAO === arrivalAirport), [arrivalAirport]);
+
+    // const orderedWinds = Object.entries(winds).sort((a, b) => {
+    //     return distanceToGeodesicLine([a[1].location.lat, a[1].location.lon], path) - distanceToGeodesicLine([b[1].location.lat, b[1].location.lon], path);
+    // });
+
+    const path = useMemo(() => {
+        if (!departure || !arrival) return null;
+
+        const departurePoint = L.latLng(departure.lat, departure.lon);
+        const arrivalPoint = L.latLng(arrival.lat, arrival.lon);
+
+        // const path = L.polyline([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
+        const path = new LGeodesic.GeodesicLine([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
+        // path.addTo(map);
+
+        return path;
+    }, [departure, arrival]);
+
+    const orderedWinds = useMemo(() => {
+        if (!path) return [];
+
+        return Object.entries(winds).sort((a, b) => {
+            return distanceToGeodesicLine([a[1].location.lat, a[1].location.lon], path) - distanceToGeodesicLine([b[1].location.lat, b[1].location.lon], path);
+        });
+    }, [path, winds]);
 
     useEffect(() => {
         if (departureAirport && arrivalAirport) {
@@ -118,14 +171,6 @@ const PathLayer = (props) => {
 
             if (!departure || !arrival) return;
 
-            const departurePoint = L.latLng(departure.lat, departure.lon);
-            const arrivalPoint = L.latLng(arrival.lat, arrival.lon);
-
-            console.log(departure.lat, departure.lon)
-            console.log(arrival.lat, arrival.lon)
-
-            // const path = L.polyline([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
-            const path = new LGeodesic.GeodesicLine([departurePoint, arrivalPoint], { color: 'magenta', weight: 8 });
             path.addTo(map);
 
             map.fitBounds([
@@ -140,18 +185,15 @@ const PathLayer = (props) => {
 
             const segmentLength = turf.distance(from, to, { units: 'meters' }) * M_TO_NM;
 
-            const orderedWinds = winds.features.sort((a, b) => {
-                return distanceToGeodesicLine(a.geometry.coordinates, path) - distanceToGeodesicLine(b.geometry.coordinates, path);
-            });
-
             const magneticBearings = calculateMagneticBearing(path);
             const avgMagneticBearing = magneticBearings.reduce((acc, bearing) => acc + bearing, 0) / magneticBearings.length;
 
-            const absoluteWinds = combineWindsAloft(orderedWinds.slice(0, 3));
+            // use one station for every 50 miles
+            const windsToUse = Math.ceil(segmentLength / 50);
+            const absoluteWinds = combineWindsAloft(orderedWinds.slice(0, windsToUse), altitude);
 
             // calculate wind impact on ground speed
             const tailwindComponent = -absoluteWinds.wspd * Math.cos((absoluteWinds.wdir - avgMagneticBearing) * Math.PI / 180);
-            console.log(tailwindComponent)
 
             if (onRouteUpdate) {
                 onRouteUpdate({
@@ -170,7 +212,7 @@ const PathLayer = (props) => {
                 map.removeLayer(path);
             }
         }
-    }, [map, departureAirport, arrivalAirport, onRouteUpdate]);
+    }, [map, orderedWinds, altitude, departureAirport, arrivalAirport, onRouteUpdate]);
 
     return (
         <FeatureGroup>
@@ -186,7 +228,7 @@ const PathLayer = (props) => {
 }
 
 const Map = (props) => {
-    const { departureAirport, arrivalAirport, onRouteUpdate } = props;
+    const { altitude, departureAirport, arrivalAirport, onRouteUpdate } = props;
 
     const cycle = '20230223'
     const center = [Number(kcvo.lat), Number(kcvo.lon)];
@@ -237,7 +279,7 @@ const Map = (props) => {
                     </LayersControl.Overlay>
                 </LayersControl>
 
-                <PathLayer departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={onRouteUpdate} />
+                <PathLayer altitude={altitude} departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={onRouteUpdate} />
             </MapContainer>
         </>
     )
