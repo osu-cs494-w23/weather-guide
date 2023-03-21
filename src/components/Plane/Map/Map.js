@@ -156,7 +156,9 @@ const PathLayer = (props) => {
             if (onRouteUpdate) {
                 onRouteUpdate({
                     departure: departure.ICAO,
+                    departureName: departure.name,
                     arrival: arrival.ICAO,
+                    arrivalName: arrival.name,
                     length: segmentLength,
                     magneticBearing: avgMagneticBearing,
                     absoluteWinds: absoluteWinds,

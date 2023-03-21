@@ -1,11 +1,9 @@
-import { faRepeat } from "@fortawesome/free-solid-svg-icons";
+import { faRepeat, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Map from './Map/Map';
 import classes from './Plane.module.scss';
-
-const AIRSPEED_KT = 110;
 
 const hoursToHoursMinutes = (hours) => {
     const h = Math.floor(hours);
@@ -16,16 +14,19 @@ const hoursToHoursMinutes = (hours) => {
 const Plane = () => {
     const [departureAirport, setDepartureAirport] = useState('')
     const [arrivalAirport, setArrivalAirport] = useState('')
-
-    const [airspeed, setAirspeed] = useState(AIRSPEED_KT)
-
     const [route, setRoute] = useState({});
 
-    const groundSpeed = useMemo(() => airspeed + (route?.tailwindComponent ?? 0), [airspeed, route]);
+    const [showAdvanced, setShowAdvanced] = useState(false)
+
+    const [airspeed, setAirspeed] = useState(110)
+    const [altitude, setAltitude] = useState(6000)
+
+    const groundSpeed = useMemo(() => Number(airspeed) + (route?.tailwindComponent ?? 0), [airspeed, route]);
     const wind = useMemo(() => ({
         speed: Math.abs(route?.tailwindComponent ?? 0),
         component: route?.tailwindComponent > 0 ? 'tail' : 'head'
     }), [route]);
+    const duration = useMemo(() => (route?.length ?? 0) / groundSpeed, [route, groundSpeed]);
 
     const flipAirports = () => {
         setDepartureAirport(arrivalAirport);
@@ -51,9 +52,34 @@ const Plane = () => {
                     </div>
 
                     <div className={classes.planeRouteInfo}>
-                        <div>{(route?.length ?? 0).toFixed(2)} nm</div>
-                        <div>{hoursToHoursMinutes((route?.length ?? 0) / groundSpeed)} @ {airspeed.toFixed(0)} kt ({wind.speed.toFixed(0)} kt {wind.component})</div>
+                        {route?.departure && route?.arrival && (
+                            <div className={classes.planeRouteTitle}>
+                                {route.departureName}
+                                <FontAwesomeIcon className={classes.planeRouteArrowIcon} icon={faArrowRight} />
+                                {route.arrivalName}
+                            </div>
+                        )}
+                        <div className={classes.planeRouteLength}>{(route?.length ?? 0).toFixed(1)} nm</div>
+                        <div className={classes.planeRouteDuration}>{duration > 0 ? hoursToHoursMinutes(duration) : '∞'} @ {(Number(airspeed) ?? 0).toFixed(0)} kt ({wind.speed.toFixed(0)} kt {wind.component})</div>
                     </div>
+
+                    <div className={classes.planeRouteAdvancedToggle} onClick={() => setShowAdvanced(!showAdvanced)}>
+                        {showAdvanced ? 'Hide' : 'Show'} advanced options
+                    </div>
+
+                    {showAdvanced && (
+                        <div className={classes.planeRouteAdvanced}>
+                            <div className={classes.planeRouteAdvancedInput}>
+                                <label>Airspeed</label>
+                                <input type="number" value={airspeed} onChange={e => setAirspeed(e.target.value)} />
+                            </div>
+
+                            <div className={classes.planeRouteAdvancedInput}>
+                                <label>Altitude</label>
+                                <input type="number" value={altitude} onChange={e => setAltitude(e.target.value)} />
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <Map departureAirport={departureAirport} arrivalAirport={arrivalAirport} onRouteUpdate={setRoute} />

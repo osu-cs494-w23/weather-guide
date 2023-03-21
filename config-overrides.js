@@ -10,15 +10,15 @@ module.exports = (config, env) => {
         routes: ['/', '/weather', '/car', '/plane', '/boat'],
         staticDir: path.join(__dirname, 'build'),
 
-        postProcess(renderedRoute) {
-          console.log(renderedRoute)
-          return renderedRoute;
-        },
+        // postProcess(renderedRoute) {
+        //   console.log(renderedRoute)
+        //   return renderedRoute;
+        // },
 
-        renderer: new Renderer({
-          // renderAfterElementExists: '.App',
-          renderAfterTime: 5000,
-        }),
+        // renderer: new Renderer({
+        //   // renderAfterElementExists: '.App',
+        //   renderAfterTime: 5000,
+        // }),
       }),
     ]);
   }
