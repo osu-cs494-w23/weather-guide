@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import WeatherBroadcast from '../MainPage/WeatherBroadCast/Weather';
+import './Weather.css';
 
 const APIKEY = '0efd39a5159ec4ff5bd0154841da469a';
 
 const Weather = () => {
   const [city, setCity] = useState('');
   const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState(null);
 
   const handleCityChange = (e) => {
     setCity(e.target.value);
@@ -13,16 +16,28 @@ const Weather = () => {
 
   useEffect(() => {
     if (city) {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}`;
-      fetch(url)
-        .then(response => response.json())
-        .then(data => setWeather(data))
+      const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}`;
+      const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${APIKEY}`;
+
+      Promise.all([fetch(weatherUrl), fetch(forecastUrl)])
+        .then(([weatherResponse, forecastResponse]) => {
+          return Promise.all([weatherResponse.json(), forecastResponse.json()]);
+        })
+        .then(([weatherData, forecastData]) => {
+          setWeather(weatherData);
+          setForecast(forecastData);
+        })
         .catch(error => console.log(error));
     }
   }, [city]);
 
   return (
     <>
+      <Helmet>
+          <title>Weather | Weather Guide</title>
+          <meta name="description" content="Get the big picture with Weather Guide!" />
+      </Helmet>
+
       <div>
         {weather &&
           <div>
@@ -33,6 +48,21 @@ const Weather = () => {
             <p>Conditions: {weather.weather[0].description}</p>
           </div>
         }
+        {forecast && (
+          <div>
+            <h2>Forecast Details for {forecast.city.name}, {forecast.city.country}</h2>
+            <ul>
+              {forecast.list.map((forecastItem) => (
+                <li key={forecastItem.dt}>
+                  <p>Date/Time: {forecastItem.dt_txt}</p>
+                  <p>Temperature: {forecastItem.main.temp} °F</p>
+                  <p>Humidity: {forecastItem.main.humidity}%</p>
+                  <p>Conditions: {forecastItem.weather[0].description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <WeatherBroadcast onCityChange={handleCityChange} />
       </div>
     </>

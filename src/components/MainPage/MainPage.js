@@ -1,18 +1,22 @@
-import React, { useState  } from 'react';
-import classes from "./MainPage.module.scss"
-import Banner from "./Banner/Banner";
-import SelectMode from "./SelectMode/SelectMode";
-import Weather  from "./WeatherBroadCast/Weather"
-const MainPage = () =>{
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import Banner from './Banner/Banner';
+import SelectMode from './SelectMode/SelectMode';
+import Weather from "./WeatherBroadCast/Weather";
 
-    return(
-        <>
+const MainPage = () => {
+    return (
+        <div >
+            <Helmet>
+                <title>Weather Guide</title>
+                <meta name="description" content="Land, sea or air, we'll help you get there!" />
+            </Helmet>
 
             <Banner></Banner>
             <SelectMode></SelectMode>
             <Weather></Weather>
 
-        </>
+        </div>
     )
 
 }

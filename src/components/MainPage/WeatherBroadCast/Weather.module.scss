@@ -1,7 +1,12 @@
 @import  "/src/variables" ;
 
 
+.weatherCard > div, span, img{
+  overflow-x: hidden;
+}
+
 .WeatherWrapper{
+
   margin-top: 100px;
   width: 100vw;
   background-color: $mainText;
@@ -38,7 +43,6 @@
   width: 600px;
   -webkit-appearance: none;
   outline: none;
-
 }
 
 .submitButton{
@@ -78,6 +82,7 @@
 }
 
 .icon{
+  overflow-x: hidden;
   width: 160px;
   display: block;
   padding-left: 30px;
@@ -117,10 +122,11 @@
 }
 
 .weatherType{
+  overflow: hidden;
   color: $mainText;
-  margin-top: 20px;
-  margin-left: -175px;
-  font-size: 24px;
+  margin-top: 30px;
+  margin-left: 30px;
+  font-size: 20px;
 }
 
 
@@ -128,13 +134,15 @@
 
 
 .cardRowTitle{
+  padding-bottom: 8px;
   margin-left: 30px;
   font-size: 20px;
   float: left;
 }
 
 .cardLine{
-  height: 1px;
+  overflow: hidden;
+  height: 2px;
   background-color: $mainText;
   width: 290px;
   margin-left: 30px;
@@ -191,7 +199,12 @@
   margin-top: 20px;
 }
 
+.lengthWrapper{
+  overflow: hidden;
+}
+
 .dayLength{
+  overflow: hidden;
   text-align: right;
   margin-right: 30px;
   font-size: 18px;
@@ -206,6 +219,7 @@
 }
 
 .time{
+
   margin-top: 10px;
   font-size: 20px;
   display: block;
@@ -230,12 +244,10 @@
 }
 
 .sunriseLine{
+  overflow: hidden;
   margin-left: 20px;
   margin-top: 20px;
   width: 280px;
-  height: 1px;
+  height: 2px;
   background-color: $mainText;
 }
-
-
-

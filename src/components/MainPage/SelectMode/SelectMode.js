@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import classes from "./SelectMode.module.scss"
-
+import classes from "./SelectMode.module.scss";
+import { Link } from "react-router-dom";
 
 const SelectMode = () =>{
 
     return(
         <>
-
             <div className={classes.selectModeWrapper}>
                 <div className={classes.cardLeft}>
                     <div className={classes.title + " " + classes.carTitle}>
                         Travel on Land
-
                     </div>
-
                 </div>
                 <div className={classes.cardCenter}>
                     <div className={classes.title + " "+ classes.boatTitle}>
@@ -27,19 +24,18 @@ const SelectMode = () =>{
                 </div>
             </div>
             <div className={classes.buttonsWrapper}>
-                <div className={classes.button + " " + classes.carButton}>
-                    Research
-                </div>
-                <div className={classes.button + " " + classes.sailButton}>
-                    Research
-                </div>
-                <div className={classes.button + " " + classes.planeButton}>
-                    Research
-                </div>
+                <Link to="/car" className={classes.button + " " + classes.carButton}>
+                    Drive
+                </Link>
+                <Link to="/boat" className={classes.button + " " + classes.sailButton}>
+                    Sail
+                </Link>
+                <Link to="/plane" className={classes.button + " " + classes.planeButton}>
+                    Fly
+                </Link>
             </div>
         </>
     )
 }
 
 export default  SelectMode
-
