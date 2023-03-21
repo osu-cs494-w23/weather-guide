@@ -63,7 +63,7 @@ const Car = () => {
                     <button type = 'submit' className={classes.submitButton}>Submit</button>
                 </form>
             </div>
-            <div className={classes.resultContainer}>
+            <div className={classes.resContainer}>
                 {result && <p>Here's your result: {result} </p>}
             </div>
         </>

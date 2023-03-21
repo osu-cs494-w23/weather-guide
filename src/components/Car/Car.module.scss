@@ -3,6 +3,25 @@
 }
 
 .inputContainer {
+    position:relative;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin:20px;
+    zoom:1.4;
+}
+
+
+.submitButton {
+    display:block;
+    margin:0 auto;
+    margin-top:13px;
+    justify-content: center;
+    align-items: center;
+}
+
+.resContainer {
     display:flex;
     flex-direction: column;
     justify-content: center;

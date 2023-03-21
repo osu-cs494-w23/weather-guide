@@ -47,7 +47,8 @@ render() {
             />
         </GoogleMap>
     ));
-
+    
+    // window.location.reload()
     return (
         <div>
             <GoogleMapExample
@@ -58,7 +59,6 @@ render() {
 
 
        );
-       window.location.reload()
     }
 }
 
