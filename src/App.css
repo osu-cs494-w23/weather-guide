@@ -1,4 +1,6 @@
-
+#map-container{
+  z-index: 0 !important;
+}
 
 .App {
   overflow-x: hidden;
