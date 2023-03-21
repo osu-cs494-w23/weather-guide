@@ -19,8 +19,8 @@ componentDidMount() {
 
     directionsService.route(
         {
-            origin: this.props.origin,
-            destination: this.props.destination,
+            origin: {lat: this.props.origin.lat, lng: this.props.origin.lng},
+            destination: {lat: this.props.destination.lat, lng: this.props.destination.lng},
             travelMode: google.maps.TravelMode.DRIVING,
         },
         (result, status) => {
@@ -48,7 +48,6 @@ render() {
         </GoogleMap>
     ));
     
-    // window.location.reload()
     return (
         <div>
             <GoogleMapExample
