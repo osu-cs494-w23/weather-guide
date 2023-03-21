@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import classes from './Car.module.scss';
-import CarResult from './CarResult';
+import Geocode from "react-geocode";
+import Map from './Map';
+import withScriptjs from 'react-google-maps/lib/withScriptjs';
+
+Geocode.setApiKey("AIzaSyCn83Izszh5s1DBeiFCmaVQZM7jAXMwMdU");
+const MapLoader = withScriptjs(Map)
 
 const Car = () => {
 
@@ -9,10 +14,33 @@ const Car = () => {
     const [arrivingCity, setarrivingCity] = useState('')
     const [result, setResult] = useState('')
 
+    const origin = {}
+    const destination = {}
+
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(departingCity, arrivingCity)
-        setResult(<CarResult departingCity={departingCity} arrivingCity={arrivingCity} ev={true}></CarResult>)
+        Geocode.fromAddress(departingCity).then(
+            (response) => {
+                const { lat, lng } = response.results[0].geometry.location;
+                origin.lat = lat
+                origin.lng = lng
+            }
+        )
+        Geocode.fromAddress(arrivingCity).then(
+            (response) => {
+                const { lat, lng } = response.results[0].geometry.location;
+                destination.lat = lat
+                destination.lng = lng
+            }
+        )
+
+        console.log(origin, destination, typeof(origin.lat))
+
+
+        setResult(<MapLoader googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCn83Izszh5s1DBeiFCmaVQZM7jAXMwMdU"
+        loadingElement={<div style={{ height: `100%` }} />} origin={origin} destination={destination} />)
+
     }
 
     return (

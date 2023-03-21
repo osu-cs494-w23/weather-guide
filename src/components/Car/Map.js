@@ -6,6 +6,7 @@ import {
     GoogleMap,
     DirectionsRenderer
 } from "react-google-maps";
+
 class Map extends Component {
     state = {
         directions: null,
@@ -16,22 +17,11 @@ class Map extends Component {
 componentDidMount() {
     const directionsService = new google.maps.DirectionsService();
 
-    const origin = { lat: 6.5244, lng:  3.3792 };
-    const destination = { lat: 6.4667, lng:  3.4500};
-
     directionsService.route(
         {
-            origin: origin,
-            destination: destination,
+            origin: this.props.origin,
+            destination: this.props.destination,
             travelMode: google.maps.TravelMode.DRIVING,
-            waypoints: [
-                {
-                    location: new google.maps.LatLng(6.4698,  3.5852)
-                },
-                {
-                    location: new google.maps.LatLng(6.6018,3.3515)
-                }
-            ]
         },
         (result, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
@@ -68,6 +58,7 @@ render() {
 
 
        );
+       window.location.reload()
     }
 }
 
