@@ -1,5 +1,7 @@
-const PrerenderSPAPlugin = require('@andrewda/prerender-spa-plugin');
 const path = require('path');
+
+const PrerenderSPAPlugin = require('@andrewda/prerender-spa-plugin');
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 module.exports = (config, env) => {
   if (env === 'production') {
@@ -7,11 +9,15 @@ module.exports = (config, env) => {
       new PrerenderSPAPlugin({
         routes: ['/', '/weather', '/car', '/plane', '/boat'],
         staticDir: path.join(__dirname, 'build'),
-        renderAfterTime: 5000,
         postProcess(renderedRoute) {
           console.log(renderedRoute)
           return renderedRoute;
         },
+
+        renderer: new Renderer({
+          renderAfterElementExists: '.App',
+          // renderAfterTime: 5000,
+        }),
       }),
     ]);
   }
