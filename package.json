@@ -31,7 +31,8 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@dreysolano/prerender-spa-plugin": "^1.0.3",
+    "@andrewda/prerender-spa-plugin": "^1.0.4",
+    "puppeteer": "^19.7.5",
     "react-app-rewired": "^2.2.1",
     "sass": "^1.59.2"
   },
