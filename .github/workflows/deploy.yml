@@ -79,7 +79,7 @@ jobs:
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Install dependencies
-        run: apt update && apt install -y libxtst6
+        run: sudo apt update && sudo apt install -y libxtst6
 
       - name: Build app
         run: CI=false PUBLIC_URL="https://osu-cs494-w23.github.io/weather-guide/" REACT_APP_BASENAME="/weather-guide" npm run build
