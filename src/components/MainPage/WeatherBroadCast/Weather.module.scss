@@ -57,6 +57,7 @@
   color: $mainText;
   font-family: $mainFont;
   font-size: 22px;
+  border: none;
 }
 
 .searchIcon{
@@ -77,11 +78,13 @@
 }
 
 .cardColumn{
+  overflow-y: hidden;
   height: 300px;
   display: inline-block;
 }
 
 .icon{
+  overflow-y: hidden;
   overflow-x: hidden;
   width: 160px;
   display: block;
@@ -104,10 +107,11 @@
 
 
 .temp{
-  margin-right: 60px;
+  position: absolute;
+  margin-left: 180px;
   color: $mainText;
   font-size: 100px;
-  margin-top: 35px;
+  margin-top: 20px;
   float: right;
 
 }

@@ -50,6 +50,8 @@ const Weather = () =>{
         return res
     }
 
+    console.log(response.current)
+
 
     return(
         <div className={classes.WeatherWrapper}>
@@ -92,8 +94,8 @@ const Weather = () =>{
                                     <div className={classes.cardLine}></div>
                                 </div>
                                 <div className={classes.topRow + " " + classes.weatherInfoRow}>
-                                    <div className={classes.cardRowTitle}>Gust </div>
-                                    <div className={classes.rowInfo}> {response.current.wind_gust}  meter/s</div>
+                                    <div className={classes.cardRowTitle}>Visibility </div>
+                                    <div className={classes.rowInfo}> {response.current.visibility} m</div>
                                     <div className={classes.cardLine}></div>
                                 </div>
                             </div>
@@ -161,7 +163,7 @@ const Weather = () =>{
                         </div>
                     </div>
                     :
-                    <input className={classes.submitButton} value={"Search"}  type={"submit"}/>
+                    <input className={classes.submitButton} value={"Search"} type={"submit"}/>
                 }
 
             </form>

@@ -1,17 +1,14 @@
+@import  "/src/variables" ;
+
 .boatWrapper{
+  background-color: $mainText;
+  display: flex;
   width: 100vw;
 }
 
-.pathPlanning{
-  display: inline-block;
-  width: 50vw;
-  height: 100vh;
-}
-
-
 .windyWrapper{
-  display: block;
-  width: 50vw;
+  display: inline-block;
+  width: 50%;
   height: calc(100vh - 66px);
 }
 
@@ -20,5 +17,132 @@
   height: 96vh;
 }
 
+.searchLocation{
+  width: 50vw;
+  display: inline-block;
+  height: calc(100vh - 66px);
+}
 
+.searchLocation{
+  text-align: center;
+}
+
+.title{
+
+}
+
+.filler{ transition: 0.2s ease-in-out}
+
+.fillerClosed{
+  margin-top: 0;
+}
+
+.fillderOpenned{
+  margin-top: calc(50vh - 200px);
+}
+
+.long{
+  transition: 0.2s ease;
+  margin-top: 30px;
+  display: inline-block;
+  padding: 10px;
+  margin-right: 25px;
+  -webkit-appearance: none;
+  width: 240px;
+  height: 20px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+}
+
+.lat{
+  border: none;
+  font-size: 16px;
+  height: 20px;
+  outline: none;
+  width: 240px;
+  margin-left: 25px;
+  -webkit-appearance: none;
+  padding: 10px;
+  display: inline-block;
+}
+
+.submitButton{
+  margin: 30px auto;
+  display: block;
+  background-color: $menuColor;
+  -webkit-appearance: none;
+  outline: none;
+  width: 150px;
+  height: 45px;
+  text-align: center;
+  color: $mainText;
+  font-family: $mainFont;
+  border: none;
+  font-size: 22px;
+}
+
+.resultWrapper{
+  font-family: $mainFont;
+  color: $mainText;
+  background-color: $mainBack;
+  margin-top: calc(50vh - 350px);
+  width: 600px;
+  margin-left: calc(50% - 300px);
+  text-align: left;
+}
+
+.cardTitle{
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size: 22px;
+  text-align: left;
+
+}
+
+.icon{
+
+}
+
+.iconWrapper{
+  height: 180px;
+  width: 300px;
+  display: inline-block;
+}
+
+.value{
+  float: right;
+}
+
+
+.cardData{
+  padding-top: 10px;
+  height: 150px;
+  width: 300px;
+  display: inline-block;
+}
+
+.contentWrapper{
+  margin-top: -30px;
+}
+
+.cardData > p{
+  width: 280px;
+}
+
+.desc{
+  padding-left: 10px;
+  display: block;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+
+.line{
+  overflow: hidden;
+  height: 2px;
+  background-color: $mainText;
+  width: 280px;
+  margin-top: 10px;
+}
 
