@@ -42,6 +42,8 @@ const Plane = () => {
 
             <div className={classes.planeContainer}>
                 <div className={classes.planeRouteForm}>
+                    <h1>Enter Your Route of Flight</h1>
+
                     <div className={classes.planeRouteFormInputs}>
                         <div>
                             <input className={classes.planeAirportInput} placeholder="Departure airport (e.g. KCVO)" value={departureAirport} onChange={e => setDepartureAirport(e.target.value?.toUpperCase())} />
