@@ -7,6 +7,7 @@ module.exports = (config, env) => {
       new PrerenderSPAPlugin({
         routes: ['/', '/weather', '/car', '/plane', '/boat'],
         staticDir: path.join(__dirname, 'build'),
+        renderAfterTime: 5000,
         postProcess(renderedRoute) {
           console.log(renderedRoute)
           return renderedRoute;
