@@ -21,36 +21,36 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  install:
-    name: Install node_modules
-    runs-on: ubuntu-latest
+  # install:
+  #   name: Install node_modules
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
 
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+  #     - name: Setup node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
 
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+  #     - name: Cache npm
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.npm
+  #         key: npm-${{ hashFiles('package-lock.json') }}
+  #         restore-keys: npm-
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+  #     - name: Cache node_modules
+  #       uses: actions/cache@v3
+  #       id: cache-node-modules
+  #       with:
+  #         path: node_modules
+  #         key: modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci --no-audit
+  #     - name: Install dependencies
+  #       if: steps.cache-node-modules.outputs.cache-hit != 'true'
+  #       run: npm ci --no-audit
 
   deploy:
     name: Deploy to GitHub Pages
@@ -59,7 +59,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    needs: install
+    # needs: install
     runs-on: ubuntu-latest
 
     steps:
@@ -71,12 +71,16 @@ jobs:
         with:
           node-version: 18
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+      # - name: Cache node_modules
+      #   uses: actions/cache@v3
+      #   id: cache-node-modules
+      #   with:
+      #     path: node_modules
+      #     key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        # if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci --no-audit
 
       - name: Build app
         run: CI=false PUBLIC_URL="https://osu-cs494-w23.github.io/weather-guide/" REACT_APP_BASENAME="/weather-guide" npm run build
